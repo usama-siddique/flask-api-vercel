@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Optional: allows cross-origin requests if you need it
+CORS(app)  # Optional, only if you want to allow cross-origin requests
 
 # Sample data
 data1 = {"apple": "red", "banana": "yellow"}
@@ -40,6 +40,9 @@ def update_data2():
     data2.update(content)
     return jsonify({"message": "data2 updated", "data2": data2})
 
-# Required handler for Vercel
-def handler(request, response):
-    return app(request.environ, response.start_response)
+
+# THIS is the Vercel handler entrypoint:
+
+def handler(environ, start_response):
+    # `app` is your Flask WSGI app
+    return app(environ, start_response)
